@@ -9,14 +9,22 @@ const startScreen = document.querySelector(".game-intro");
 let carWidth = 55;
 let carHeight = 140;
 let carX = 200;
-let carY = 200;
+let carY = 400;
 const carSpeedValue = 5;
 
 //obstacle 1 variables
-let obstacle1Width = 300;
+let obstacle1Width = 200;
 let obstacle1Height = 30;
-let obstacle1X = 0;
+let obstacle1X = 10;
 let obstacle1Y = 10;
+let obstacle1Speed = 5
+
+//obstacle 1 variables
+let obstacle2Width = 130;
+let obstacle2Height = 30;
+let obstacle2X = 250;
+let obstacle2Y = -300;
+let obstacle2Speed = 5
 
 const backgrounImg = new Image()
 backgrounImg.src = "../images/road.png"
@@ -46,12 +54,39 @@ window.onload = () => {
     }
   }
 
-  /*function drawObstacle1() {
+// Obstacle 1 functions
+
+  function drawObstacle1() {
     ctx.beginPath();
     ctx.fillStyle = "red";
     ctx.fillRect(obstacle1X, obstacle1Y, obstacle1Width, obstacle1Height);
     ctx.closePath();
-  }*/
+  }
+
+  function moveObstacle1() {
+    if (obstacle1Y < canvas.height){
+      obstacle1Y += obstacle1Speed
+    } else {
+      obstacle1Y = 0
+    }
+  }
+
+// Obstacle 2 functions
+
+  function drawObstacle2() {
+    ctx.beginPath();
+    ctx.fillStyle = "red";
+    ctx.fillRect(obstacle2X, obstacle2Y, obstacle2Width, obstacle2Height);
+    ctx.closePath();
+  }
+
+  function moveObstacle2() {
+    if (obstacle2Y < canvas.height){
+      obstacle2Y += obstacle2Speed
+    } else {
+      obstacle2Y = 0
+    }
+  }
 
   let animationFrameId;
 
@@ -63,6 +98,10 @@ window.onload = () => {
     ctx.drawImage(backgrounImg, 0, 0, canvas.width, canvas.height)
     ctx.drawImage(carImage, carX, carY, carWidth, carHeight)
     carMove()
+    drawObstacle1()
+    moveObstacle1()
+    drawObstacle2()
+    moveObstacle2()
     
     animationFrameId = requestAnimationFrame(startGame);
 
