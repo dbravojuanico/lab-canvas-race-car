@@ -42,6 +42,10 @@ window.onload = () => {
   canvas.style.display = "none"
 
   document.getElementById('start-button').onclick = () => {
+    gameOver = false
+    obstacle1Y = 10;
+    obstacle2Y = -300;
+    totalScore = 0;
     startGame();
   };
 
@@ -120,6 +124,16 @@ window.onload = () => {
     ctx.closePath();
   }
 
+  // Game over text function
+
+  function drawGameOver() {
+    ctx.beginPath();
+    ctx.font = "40px sans-serif";
+    ctx.fillStyle = "green";
+    ctx.fillText(`GAME OVER ${totalScore} points`, 50, 200);
+    ctx.closePath();
+  }
+
   let animationFrameId;
 
   function startGame() {
@@ -138,8 +152,12 @@ window.onload = () => {
     
     if (gameOver) {
       cancelAnimationFrame(animationFrameId);
-      startScreen.style.display = "block"
-      canvas.style.display = "none"
+      drawGameOver()
+      setTimeout(() => {
+        startScreen.style.display = "block"
+        canvas.style.display = "none"
+      },"2500");
+     
       
     } else {
       animationFrameId = requestAnimationFrame(startGame);
