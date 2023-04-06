@@ -4,6 +4,9 @@ const ctx = canvas.getContext("2d");
 
 const startScreen = document.querySelector(".game-intro");
 
+// Score
+let totalScore = 0;
+let gameOver = false;
 
 //car variables
 let carWidth = 55;
@@ -64,10 +67,20 @@ window.onload = () => {
   }
 
   function moveObstacle1() {
+    if (
+      (obstacle1Y + obstacle1Height) === carY && 
+      (obstacle1X + obstacle1Width) > carX &&
+      obstacle1X < (carX + carWidth)
+     )
+     {
+      gameOver = true
+    }
     if (obstacle1Y < canvas.height){
       obstacle1Y += obstacle1Speed
     } else {
       obstacle1Y = 0
+      obstacle1X = Math.floor(Math.random() * canvas.width)
+      totalScore += 1
     }
   }
 
@@ -81,11 +94,30 @@ window.onload = () => {
   }
 
   function moveObstacle2() {
+    if (
+    (obstacle2Y + obstacle2Height) === carY && 
+    (obstacle2X + obstacle2Width) > carX &&
+    obstacle2X < (carX + carWidth)
+    )
+    {
+      gameOver = true
+    }
     if (obstacle2Y < canvas.height){
       obstacle2Y += obstacle2Speed
     } else {
       obstacle2Y = 0
+      obstacle2X = Math.floor(Math.random() * canvas.width)
+      totalScore += 1
     }
+  }
+
+  // Draw score function
+  function drawScore() {
+    ctx.beginPath();
+    ctx.font = "30px sans-serif";
+    ctx.fillStyle = "green";
+    ctx.fillText(`Score : ${totalScore}`, 10, 30);
+    ctx.closePath();
   }
 
   let animationFrameId;
@@ -102,8 +134,17 @@ window.onload = () => {
     moveObstacle1()
     drawObstacle2()
     moveObstacle2()
+    drawScore()
     
-    animationFrameId = requestAnimationFrame(startGame);
+    if (gameOver) {
+      cancelAnimationFrame(animationFrameId);
+      startScreen.style.display = "block"
+      canvas.style.display = "none"
+      
+    } else {
+      animationFrameId = requestAnimationFrame(startGame);
+    }
+   
 
     document.addEventListener("keydown", event => {
       if (event.code === "ArrowLeft") {
